@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConstructPro ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar {
+            transition: all 0.3s;
+        }
+        .module-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .active-module {
+            border-left: 4px solid #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        .form-input {
+            transition: border-color 0.3s;
+        }
+        .form-input:focus {
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-blue-900 text-white w-64 flex-shrink-0">
+            <div class="p-4 flex items-center justify-between border-b border-blue-800">
+                <div class="flex items-center space-x-2">
+                    <img src="https://placehold.co/40x40" alt="ConstructPro logo - yellow hardhat with blue background" class="rounded-full">
+                    <span class="text-xl font-bold">ConstructPro</span>
+                </div>
+                <button id="sidebar-toggle" class="text-blue-200 hover:text-white">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <div class="mb-6">
+                    <h3 class="text-xs uppercase text-blue-300 tracking-wider mb-2">Main Menu</h3>
+                    <ul>
+                        <li class="mb-1">
+                            <a href="#" class="block px-2 py-1 rounded text-blue-100 hover:bg-blue-800 hover:text-white flex items-center">
+                                <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mb-6">
+                    <h3 class="text-xs uppercase text-blue-300 tracking-wider mb-2">Modules</h3>
+                    <ul>
+                        <li class="mb-1">
+                            <a href="#" data-module="purchase" class="module-link active-module block px-2 py-1 rounded text-white bg-blue-800 flex items-center">
+                                <i class="fas fa-shopping-cart mr-2"></i> Purchase Management
+                            </a>
+                        </li>
+                        <li class="mb-1">
+                            <a href="#" data-module="inventory" class="module-link block px-2 py-1 rounded text-blue-100 hover:bg-blue-800 hover:text-white flex items-center">
+                                <i class="fas fa-warehouse mr-2"></i> Inventory Management
+                            </a>
+                        </li>
+                        <li class="mb-1">
+                            <a href="#" data-module="finance" class="module-link block px-2 py-1 rounded text-blue-100 hover:bg-blue-800 hover:text-white flex items-center">
+                                <i class="fas fa-money-bill-wave mr-2"></i> Finance & Billing
+                            </a>
+                        </li>
+                        <li class="mb-1">
+                            <a href="#" data-module="project" class="module-link block px-2 py-1 rounded text-blue-100 hover:bg-blue-800 hover:text-white flex items-center">
+                                <i class="fas fa-project-diagram mr-2"></i> Project Management
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mb-6">
+                    <h3 class="text-xs uppercase text-blue-300 tracking-wider mb-2">Settings</h3>
+                    <ul>
+                        <li class="mb-1">
+                            <a href="#" class="block px-2 py-1 rounded text-blue-100 hover:bg-blue-800 hover:text-white flex items-center">
+                                <i class="fas fa-user-cog mr-2"></i> Profile
+                            </a>
+                        </li>
+                        <li class="mb-1">
+                            <a href="#" class="block px-2 py-1 rounded text-blue-100 hover:bg-blue-800 hover:text-white flex items-center">
+                                <i class="fas fa-cog mr-2"></i> Settings
+                            </a>
+                        </li>
+                        <li class="mb-1">
+                            <a href="#" class="block px-2 py-1 rounded text-blue-100 hover:bg-blue-800 hover:text-white flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <!-- Top Navigation -->
+            <header class="bg-white shadow-sm">
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <h1 class="text-xl font-semibold text-gray-800">Purchase Management</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 rounded-full text-gray-600 hover:bg-gray-100">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <div class="flex items-center space-x-2">
+                            <img src="https://placehold.co/32x32" alt="Company logo - modern construction site with crane in background" class="rounded-full">
+                            <span class="text-gray-700">Admin</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Module Content -->
+            <main class="p-6">
+                <!-- Purchase Management Module (Default) -->
+                <div id="purchase-module" class="module-content">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+                            <div class="space-y-3">
+                                <button class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 flex items-center justify-center">
+                                    <i class="fas fa-plus mr-2"></i> Create Purchase Order
+                                </button>
+                                <button class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 flex items-center justify-center">
+                                    <i class="fas fa-truck mr-2"></i> Receive Materials
+                                </button>
+                                <button class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 flex items-center justify-center">
+                                    <i class="fas fa-file-invoice-dollar mr-2"></i> Process Invoice
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold mb-4">Pending Approvals</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-2 border-b">
+                                    <span>PO-2023-00145 - 15 Steel Beams</span>
+                                    <button class="text-blue-600 hover:text-blue-800">Review</button>
+                                </div>
+                                <div class="flex items-center justify-between p-2 border-b">
+                                    <span>PO-2023-00146 - Concrete Mix</span>
+                                    <button class="text-blue-600 hover:text-blue-800">Review</button>
+                                </div>
+                                <div class="flex items-center justify-between p-2 border-b">
+                                    <span>PO-2023-00147 - Safety Equipment</span>
+                                    <button class="text-blue-600 hover:text-blue-800">Review</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold mb-4">Recent Purchase Orders</h3>
+                            <div class="space-y-3">
+                                <div class="p-2 border-b flex justify-between">
+                                    <div>
+                                        <div class="font-medium">PO-2023-00144</div>
+                                        <div class="text-sm text-gray-600">Electrical Supplies</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-medium">$2,450.00</div>
+                                        <div class="text-sm text-gray-600">Due: 07/25/2023</div>
+                                    </div>
+                                </div>
+                                <div class="p-2 border-b flex justify-between">
+                                    <div>
+                                        <div class="font-medium">PO-2023-00143</div>
+                                        <div class="text-sm text-gray-600">Plumbing Materials</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-medium">$1,780.50</div>
+                                        <div class="text-sm text-gray-600">Received: 07/18/2023</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+                        <div class="px-6 py-4 border-b">
+                            <h2 class="text-xl font-semibold">Purchase Order Management</h2>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-4 flex justify-between items-center">
+                                <div class="relative w-64">
+                                    <input type="text" placeholder="Search purchase orders..." class="w-full pl-8 pr-4 py-2 rounded border form-input">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                </div>
+                                <button class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 flex items-center">
+                                    <i class="fas fa-file-export mr-2"></i> Export
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PO #</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">PO-2023-00149</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">SteelCo Inc.</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Highrise Tower</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023-07-20</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023-07-30</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">$12,450.00</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900 mr-2"><i class="fas fa-eye"></i></button>
+                                                <button class="text-yellow-600 hover:text-yellow-900 mr-2"><i class="fas fa-edit"></i></button>
+                                                <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">PO-2023-00148</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">ConcreteMasters</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Bridge Construction</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023-07-18</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023-07-28</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">$8,750.00</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900 mr-2"><i class="fas fa-eye"></i></button>
+                                                <button class="text-yellow-600 hover:text-yellow-900 mr-2"><i class="fas fa-edit"></i></button>
+                                                <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">PO-2023-00147</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">SafeWorks</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">All Projects</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023-07-15</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023-07-25</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Approved</span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">$3,220.00</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900 mr-2"><i class="fas fa-eye"></i></button>
+                                                <button class="text-yellow-600 hover:text-yellow-900 mr-2"><i class="fas fa-edit"></i></button>
+                                                <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Management Module -->
+                <div id="inventory-module" class="module-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-lg font-semibold">Total Items</h3>
+                                    <p class="text-3xl font-bold mt-2">1,248</p>
+                                </div>
+                                <div class="bg-blue-100 p-3 rounded-full">
+                                    <i class="fas fa-boxes text-blue-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-lg font-semibold">Low Stock Items</h3>
+                                    <p class="text-3xl font-bold mt-2">19</p>
+                                </div>
+                                <div class="bg-yellow-100 p-3 rounded-full">
+                                    <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-lg font-semibold">Inventory Value</h3>
+                                    <p class="text-3xl font-bold mt-2">$342,875</p>
+                                </div>
+                                <div class="bg-green-100 p-3 rounded-full">
+                                    <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+                        <div class="px-6 py-4 border-b">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-xl font-semibold">Inventory Items</h2>
+                                <button class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 flex items-center">
+                                    <i class="fas fa-plus mr-2"></i> New Item
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-4 flex justify-between">
+                                <div class="relative w-64">
+                                    <input type="text" placeholder="Search inventory..." class="w-full pl-8 pr-4 py-2 rounded border form-input">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <select class="rounded border form-input">
+                                        <option>All Categories</option>
+                                        <option>Structural</option>
+                                        <option>Electrical</option>
+                                        <option>Plumbing</option>
+                                        <option>Safety</option>
+                                    </select>
+                                    <select class="rounded border form-input">
+                                        <option>All Locations</option>
+                                        <option>Main Warehouse</option>
+                                        <option>Site A</option>
+                                        <option>Site B</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Code</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Stock</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Cost</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">STL-0012</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <img src="https://placehold.co/40x40" alt="Steel beams in warehouse rack with identification tags" class="w-8 h-8 rounded-full mr-2">
+                                                    <span>Steel Beam 12"</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Structural</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Main Warehouse</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="font-medium">146</span>
+                                                <span class="text-sm text-gray-500">/ 200</span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Pcs</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">$85.00</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900 mr-2"><i class="fas fa-eye"></i></button>
+                                                <button class="text-yellow-600 hover:text-yellow-900 mr-2"><i class="fas fa-edit"></i></button>
+                                                <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">CON-0452</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <img src="https://placehold.co/40x40" alt="Concrete mix bags stacked neatly in warehouse" class="w-8 h-8 rounded-full mr-2">
+                                                    <span>Concrete Mix 25kg</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Structural</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Site A</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="font-medium">42</span>
+                                                <span class="text-sm text-gray-500">/ 100</span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Bags</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">$12.50</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900 mr-2"><i class="fas fa-eye"></i></button>
+                                                <button class="text-yellow-600 hover:text-yellow-900 mr-2"><i class="fas fa-edit"></i></button>
+                                                <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">SAF-0078</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <img src="https://placehold.co/40x40" alt="Safety helmets arranged neatly on shelf" class="w-8 h-8 rounded-full mr-2">
+                                                    <span>Safety Helmet</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Safety</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Main Warehouse</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="font-medium">12</span>
+                                                <span class="text-sm text-red-500">/ 50</span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">Pcs</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">$28.00</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900 mr-2"><i class="fas fa-eye"></i></button>
+                                                <button class="text-yellow-600 hover:text-yellow-900 mr-2"><i class="fas fa-edit"></i></button>
+                                                <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finance & Billing Module -->
+                <div id="finance-module" class="module-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-lg font-semibold">Revenue</h3>
+                                    <p class="text-3xl font-bold mt-2">$1.2M</p>
+                                    <p class="text-sm text-green-600 mt-1"><i class="fas fa-arrow-up mr-1"></i> 12% this month</p>
+                                </div>
+                                <div class="bg-green-100 p-3 rounded-full">
+                                    <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-lg font-semibold">Expenses</h3>
+                                    <p class="text-3xl font-bold mt-2">$875K</p>
+                                    <p class="text-sm text-red-600 mt-1"><i class="fas fa-arrow-up mr-1"></i> 8% this month</p>
+                                </div>
+                                <div class="bg-red-100 p-3 rounded-full">
+                                    <i class="fas fa-receipt text-red-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-lg font-semibold">Profit</h3>
+                                    <p class="text-3xl font-bold mt-2">$325K</p>
+                                    <p class="text-sm text-green-600 mt-1"><i class="fas fa-arrow-up mr-1"></i> 18% this month</p>
+                                </div>
+                                <div class="bg-blue-100 p-3 rounded-full">
+                                    <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-lg font-semibold">AR to Collect</h3>
+                                    <p class="text-3xl font-bold mt-2">$245K</p>
+                                    <p class="text-sm text-yellow-600 mt-1">15 invoices</p>
+                                </div>
+                                <div class="bg-yellow-100 p-3 rounded-full">
+                                    <i class="fas fa-file-invoice text-yellow-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold">Recent Invoices</h3>
+                                <button class="text-blue-600 hover:text-blue-800">View All</button>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="border-b pb-3">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <span class="font-medium">INV-2023-045</span>
+                                            <p class="text-sm text-gray-600">Highrise Tower</p>
+                                        </div>
+                                        <span class="font-bold">$45,200.00</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm mt-1">
+                                        <span class="text-gray-500">Issued: 07/20/23</span>
+                                        <span class="text-green-600">Paid</span>
+                                    </div>
+                                </div>
+                                <div class="border-b pb-3">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <span class="font-medium">INV-2023-044</span>
+                                            <p class="text-sm text-gray-600">Bridge Construction</p>
+                                        </div>
+                                        <span class="font-bold">$32,100.00</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm mt-1">
+                                        <span class="text-gray-500">Issued: 07/18/23</span>
+                                        <span class="text-yellow-600">Pending</span>
+                                    </div>
+                                </div>
+                                <div class="border-b pb-3">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <span class="font-medium">INV-2023-043</span>
+                                            <p class="text-sm text-gray-600">Road Expansion</p>
+                                        </div>
+                                        <span class="font-bold">$28,450.00</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm mt-1">
+                                        <span class="text-gray-500">Issued: 07/15/23</span>
+                                        <span class="text-yellow-600">Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold">Recent Payments</h3>
+                                <button class="text-blue-600 hover:text-blue-800">View All</button>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="border-b pb-3">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <span class="font-medium">PMT-2023-034</span>
+                                            <p class="text-sm text-gray-600">SteelCo Inc.</p>
+                                        </div>
+                                        <span class="font-bold">$12,450.00</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm mt-1">
+                                        <span class="text-gray-500">Paid: 07/22/23</span>
+                                        <span class="text-green-600">Cleared</span>
+                                    </div>
+                                </div>
+                                <div class="border-b pb-3">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <span class="font-medium">PMT-2023-033</span>
+                                            <p class="text-sm text-gray-600">ConcreteMasters</p>
+                                        </div>
+                                        <span class="font-bold">$8,750.00</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm mt-1">
+                                        <span class="text-gray-500">Paid: 07/20/23</span>
+                                        <span class="text-blue-600">Processing</span>
+                                    </div>
+                                </div>
+                                <div class="border-b pb-3">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <span class="font-medium">PMT-2023-032</span>
+                                            <p class="text-sm text-gray-600">SafeWorks</p>
+                                        </div>
+                                        <span class="font-bold">$3,220.00</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm mt-1">
+                                        <span class="text-gray-500">Paid: 07/18/23</span>
+                                        <span class="text-green-600">Cleared</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+                            <div class="space-y-3">
+                                <button class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 flex items-center justify-center">
+                                    <i class="fas fa-file-invoice-dollar mr-2"></i> Create Invoice
+                                </button>
+                                <button class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 flex items-center justify-center">
+                                    <i class="fas fa-hand-holding-usd mr-2"></i> Record Payment
+                                </button>
+                                <button class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 flex items-center justify-center">
+                                    <i class="fas fa-chart-pie mr-2"></i> View Reports
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+                        <div class="px-6 py-4 border-b">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-xl font-semibold">Financial Transactions</h2>
+                                <button class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 flex items-center">
+                                    <i class="fas fa-plus mr-2"></i> New Transaction
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-4 flex justify-between">
+                                <div class="relative w-64">
+                                    <input type="text" placeholder="Search transactions..." class="w-full pl-8 pr-4 py-2 rounded border form-input">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <select class="rounded border form-input">
+                                        <option>All Types</option>
+                                        <option>Invoice</option>
+                                        <option>Payment</option>
+                                        <option>Expense</option>
+                                    </select>
+                                    <select class="rounded border form-input">
+                                        <option>All Status</option>
+                                        <option>Pending</option>
+                                        <option>Paid</option>
+                                        <option>Overdue</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document No.</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023-07-22</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Payment</span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">PMT-2023-034</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">PO-2023-00149 Payment</td>
+                                            <td class="px-6 py-4 whitespace-nowrap font-medium">$12,450.00</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Cleared</span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="
