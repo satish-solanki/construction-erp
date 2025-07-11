@@ -1,0 +1,32 @@
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from . import models, schemas, services
+from .utils.database import engine, get_db
+
+# Initialize database
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+async def root():
+    return {"message": "Construction ERP API"}
+
+# Purchase order endpoints
+@app.post("/purchase-orders/", response_model=schemas.PurchaseOrder)
+async def create_purchase_order(
+    order: schemas.PurchaseOrderCreate, 
+    db: Session = Depends(get_db)
+):
+    return services.create_purchase_order(db, order)
+
+# Add other endpoints for inventory, finance, projects...
