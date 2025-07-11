@@ -1,0 +1,4 @@
+mkdir -p backend/app/{models,schemas,services,utils} frontend database
+touch backend/app/__init__.py backend/app/main.py
+touch backend/requirements.txt backend/alembic.ini backend/Dockerfile
+touch docker-compose.yml README.md

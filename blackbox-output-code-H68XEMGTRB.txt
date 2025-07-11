@@ -1,0 +1,31 @@
+construction-erp/
+├── .gitignore
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── models/
+│   │   │   ├── __init__.py
+│   │   │   ├── base.py
+│   │   │   ├── purchase.py
+│   │   │   ├── inventory.py
+│   │   │   ├── finance.py
+│   │   │   └── project.py
+│   │   ├── schemas/
+│   │   │   ├── __init__.py
+│   │   │   └── purchase.py
+│   │   ├── services/
+│   │   │   ├── __init__.py
+│   │   │   └── purchase.py
+│   │   └── utils/
+│   │       ├── __init__.py
+│   │       └── database.py
+│   ├── requirements.txt
+│   ├── alembic.ini
+│   └── Dockerfile
+├── frontend/
+│   └── construction-erp.html
+├── database/
+│   ├── migrations/
+│   └── init.sql
+└── docker-compose.yml
